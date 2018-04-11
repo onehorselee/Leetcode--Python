@@ -16,7 +16,7 @@ class Solution:
         dic = {w:words.count(w) for w in words}
         # search words combinations in s
         for i in range(len(s) - len_combo + 1):
-            seen = {defaultdict(int)}
+            seen = defaultdict(int)
             start, count = i, len(words)
             while count > 0:
                 substr = s[start: start + len_word]
