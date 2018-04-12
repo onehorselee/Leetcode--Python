@@ -29,3 +29,25 @@ class Solution:
                 
         helper(nums,[])
         return res
+    
+    
+    # 3) dynamic programming
+        def insert_num(temp, num):
+            if temp == []:
+                temp.append([num])
+                return temp
+
+            res = []
+            new_temp = list(temp)
+            for i in new_temp:
+                for j in range(len(i) + 1):
+                    ele_copy = list(i)
+                    ele_copy.insert(j, num)
+                    res.append(ele_copy)
+            return res
+
+        temp = []
+        for i in nums:
+            temp = insert_num(temp, i)
+            
+        return temp
