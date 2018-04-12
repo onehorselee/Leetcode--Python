@@ -38,12 +38,11 @@ class Solution:
                 return temp
 
             res = []
-            new_temp = list(temp)
-            for i in new_temp:
+            for i in temp:
                 for j in range(len(i) + 1):
-                    ele_copy = list(i)
-                    ele_copy.insert(j, num)
-                    res.append(ele_copy)
+                    i_copy = list(i)
+                    i_copy.insert(j, num)
+                    res.append(i_copy)
             return res
 
         temp = []
