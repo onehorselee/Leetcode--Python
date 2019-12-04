@@ -1,3 +1,2 @@
 # Leetcode--Algorithms
-
-### Initially started with python. Gradually transitioned to Java.
+https://leetcode.com/problemset/all/
