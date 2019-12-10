@@ -166,32 +166,29 @@ from (
 group by 1, 2) t1
 group by 1
 
-
-
 /*
 SQL — SPAM
 -- Table: user_actions
 -- ds(date, String) | user_id | post_id |
      action ('view','like','reaction','comment','report','reshare') |
     extra (extra reason for the action, e.g. 'love','spam','nudity')
-*/
+
+/*-- Introduce a new table: reviewer_removals, 
+  -- ds(date, String) | reviewer_id |post_id */
+
 
 /*-- Q1: how many posts were reported yesterday for each report Reason?*/
-select 
-    extra as reason
-    distinct(post_id)
-from user_actions
-where action = "report" and DATEDIFF(CURDATE(), ds)=1
+SELECT 
+    extra AS reason
+    DISTINCT(post_id)
+FROM user_actions
+WHERE action = "report" and DATEDIFF(CURDATE(), ds)=1
 GROUP BY 1
 
 
-/*-- Q2: introduce a new table: reviewer_removals, 
--- ds(date, String) | reviewer_id |post_id */
-/*
---please calculate what percent of daily content that users view on FB is actually spam?
---no need to consider if the removal happen at the same post date or not.
+/* Q2 --please calculate what percent of daily content that users view on FB is actually spam?
+      --no need to consider if the removal happen at the same post date or not.
 */
-
 select 
     user_id,
     post_id,
@@ -200,6 +197,35 @@ from user_actions
 where action="view"
 group by 1
 
+/*-- Q3: How to find the user who abuses this spam system?*/
+-- users that report spam but which are not spams, 
+-- (not spam) / reported spam - fake_spam_rate
+select 
+    users_id,
+    ifnull(round(sum(case if review_id is null then 0 else 1 end)/count(distinct u.post_id),2),0) as fake_spam_rate
+from user_actions u    
+left join reviewer_removals  r on u.post_id = r.post_id
+where u.action="report"
+group by 1
+order by 2 DESC
 
 
 
+/*SQL — given table with: (user, group, time, displays, clicks) for a payment page.
+5) how to identify click but not displays*/
+
+/*1) # of clicks and displays in given day*/
+
+/*2) click through rate,*/
+
+
+/*3) click through rate for each group,*/
+
+/*4) group 1 click rate: 10%, group 2: 15%, think about possible differences, group 3 click rate
+150%, think about possible reason,*/
+
+
+
+
+
+/**/
