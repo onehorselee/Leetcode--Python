@@ -1,0 +1,17 @@
+errorDict = {
+    "000": "Everything is fine.",
+    "001": "ERROR: DivsionCode MUST BE K OR P. CURRENT DivsionCode IS NEITHER K OR P.",
+    "002": "ERROR: UnitTypeCd MUST BE 1 (tractor) OR 2 (truck). CURRENT UnitTypeCd IS NEITHER 1 OR 0.",
+    "003": "ALERT: CUSTOMER NAME IS NOT IN THE DATABASE. SO CUSTOMER RELATIONSHIP SIZE(AVERAGE ANNUAL ORDERS) IS SET AS 1.",
+    "004": "ERROR: dealCd is not in the Dealer list. So CARS Calcualtor cannot translate it into country (CA, US).",
+    "005": "ALERT: Received Dealer Net Price is different from Calculated Dealer Net Price. And the difference is greater than $5.",
+    "006A": "ERROR: (CCSalesOptionCd + MarketModel) are not matched in MarketModel dictionary. SO cannot translate (CCSalesOptionCd + MarketModel) into a valide model identifier.",
+    "006B": "ERROR: (CCSalesOptionCd + MarketModel) are matched in MarketModel dictionary. But it is not a valid model.",
+    "007": "ERROR: cannot find KW MODEL in snowflake database. 1) The input model may not be in production anymore. or 2) the snowflake DB is not udpated.",
+    "008": "ERROR: cannot find PB MODEL IDENTIFIER in snowflake database. 1) The input model may not be in production anymore. or 2) the snowflake DB is not udpated.",
+    "999": "ERORR: cacheTables() within cacheSFTables.py does not work properly.",
+    "009": "List index out of range. CANNOT FIND SUCH TRUCK IN DATABASE. PLEASE CHECK [MODEL TYPE, CAB TYPE, PRICING PERIOD] OF TRUCK CONFIGURATION.", 
+    "010": "Pricing Period is out of range.",
+    "011": "KW Dealer Cd is not in the STOCK BONUS list.",
+    "012": "KW pricing period is not in the  STOCK BONUS list",
+} 
