@@ -212,20 +212,159 @@ order by 2 DESC
 
 
 /*SQL — given table with: (user, group, time, displays, clicks) for a payment page.
-5) how to identify click but not displays*/
+*/
 
 /*1) # of clicks and displays in given day*/
+select display, click
+from table where time=""
 
 /*2) click through rate,*/
 
 
 /*3) click through rate for each group,*/
 
-/*4) group 1 click rate: 10%, group 2: 15%, think about possible differences, group 3 click rate
+/*4) group 1 click rate: 10%,
+ group 2: 15%, think about possible differences,
+ group 3 click rate
 150%, think about possible reason,*/
+
+
+/*5) how to identify click but not displays*/
 
 
 
 
 
 /**/
+
+
+
+
+-- SQL的话给了employee, department等四个表，但是问到的两个问题只用到了employee和department两个表。
+-- Employee表有employee_id, first_name, second_name, salary, department_id五个fields，
+-- department表有id, department_name两个fields。
+
+-- SQL一：Find all department_name which the total salary of this department is larger than 40000.
+SELECT d.Department_name
+FROM Employee e JOIN Department d
+ON e.Department_id = d.Department_id
+GROUP BY d.Department_name
+HAVING SUM(e.Salary) > 40000
+
+-- SQL二：Find the employee in each department who has the max salary and print their names and salaries.
+SELECT d.Name AS Department, e.Name AS Employee, e.Salay
+FROM Department d JOIN Employee e
+ON d.Department_id = e.Department_id AND e.Salary = (
+  SELECT MAX(Salary)
+  FROM Employee e2
+  WHERE e2.Department_id = d.Department_id)
+
+
+SELECT CONCAT(e.first_name,'', e.second_name) AS name, e.salary
+FROM employee e JOIN department d
+ON e.department_id = d.department_id
+WHERE e.salary, d.department_id IN
+( SELECT MAX(e.salary),  d.department_id
+  FROM employee e JOIN department d
+  ON e. Department_id = d.department_id
+  GROUP BY d.department_id)
+
+-- 问题一: Find the percentage of the customer who at least puchase 1 product.
+SELECT COUNT(DISTINCT Sales.CustomerId) / COUNT(DISTINCT Customer.CustomerId)
+FROM Sales, Customer
+
+-- 问题二: Find (2015 total sales revenue / 2014 total sales revenue) - 1 for all the stores..
+
+SELECT StoreId, SUM(IF(YEAR(Sales_date) = '2015', revenue, 0)) / SUM(IF(YEAR(Sales_date) = '2014', revenue, 0)) - 1
+FROM Sales
+GROUP BY StoreId
+
+-- tables:
+-- customers: id, name, birthday, gender
+-- stores: id, state, area_squarefeet
+-- product: id, name,....
+-- sale: product_id, store_id, customer_id ...
+
+
+-- 1. Percentage of male in customers
+SELECT SUM(CASE WHEN gender = 'male' THEN 1 ELSE 0 END) / COUNT(*)
+FROM Customer
+
+-- 2. Percentage of customers who has at least 1 product
+SELECT SUM(CASE WHEN product_id IS NULL THEN 0 ELSE 1 END) / COUNT(*) as ratio
+FROM(
+      SELECT c.name, product_id
+      FROM customers c LEFT JOIN sale s
+      ON c.id = s.customer_id
+      GROUP BY c.id
+    ) temp ;
+
+-- 3. how many distinct states are all the store located -- count(distinct state)
+SELECT COUNT(DISTINCT(state))
+FROM stores
+
+-- 3. count the product having at least 5 unit orders
+SELECT COUNT (*)
+    FROM
+    ( SELECT product_id
+      FROM sale
+      GROUP BY product_id
+      HAVING SUM(unit_order) >= 5) temp
+
+-- 4. how many stores are having more than 26000 area sqrt, count by state basis
+SELECT state, COUNT(id)
+FROM stores s
+WHERE area_squarefeet > 26000
+GROUP BY state
+
+-- 5. print out the oldest and youngest customer's birthday on gender level
+SELECT gender, MIN(birthday), MAX(birthday)
+FROM customers
+GROUP BY gender
+
+-- sql part： 4 or 5 questions. given 4 tables 产品，销售，客户, etc. cannot remember all the questions
+-- * 找到最多的first name是什么
+
+SELECT c.First_name
+FROM Customer c
+GROUP BY c.First_name
+ORDER BY COUNT(*) DESC
+LIMIT 1
+
+-- * 找到前三销量的产品类别是什么
+SELECT o.name,  AS Cnt
+FROM Orders o
+GROUP BY o.product_name
+ORDER BY COUNT(*) DESC
+LIMIT 3
+
+-- * 购买了某两种产品的客户id是什么
+
+
+
+第二轮sql也很简单，还是产品销售那四套表。 我都没做到需要join四个表的哈哈哈。
+总结一下四题：1，考了count，
+2. 忘了
+3.order by xxx limit  
+4.就是算一下利润百分比，萨姆(销售-成本）/萨姆 销售
+
+
+
+/*
+https://www.1point3acres.com/bbs/forum.php?mod=viewthread&tid=570831&extra=page%3D1%26filter%3Dsortid%26sortid%3D311%26searchoption%5B3088%5D%5Bvalue%5D%3D13%26searchoption%5B3088%5D%5Btype%5D%3Dradio%26searchoption%5B3046%5D%5Bvalue%5D%3D2%26searchoption%5B3046%5D%5Btype%5D%3Dradio%26sortid%3D311%26orderby%3Ddateline
+Python部分很简单：
+1. 给一个数字列表且里面有None，重新输出一遍把None位置的数用前面存在的数代替。a = [1, None, 2, None, None, 5, Ne]
+2. 给一个数字列表且某些数字重复，给出每个数字还需要加进多少个才能使得列表里每个数字都一样多。nums = [1, 3, 4, 1, 7, 8, 3 , 2, 4, 5, 7, 2, 3, 5, 6, 4, 2, 8, 5]
+3. Average word length of a list of words。注意对每个word做.strip()
+4. 给两个包含数字的列表，求两个列表里不重复的数字，不用在意输出顺序。list((set(a).union(set(b))).difference(set(a).intersection(set(b))))
+
+
+
+SQL：
+1. 有fat_flag 和 另外一个flag的products，总之就是join两个表A和B 然后on的时候除了id, 再加上对与B表的两个flag的限制条件
+2. 选出single media的products（还是什么其他的table，不是重点），point在single media：这个column有不同的值，e.g. SEO  |   SEO, Ads, website | Ads, website。 single media就是用like 语句来筛选一下就好
+3. promotion ratio。有看过之前面经，这个部分说的很模糊。说白了就是问，
+在所有transaction with promotion中，transaction with promotion on first or last promotion day的比例是多少。我用了一个with 先吧transaction table和promotion table 做一个join得到有promotion的transaction table。然后在此表基础上用sum(case when )来统计在frist promotion day or last promotion day的个数 *1.0 然后再除以 COUNT(*)， 就是最后的ratio。
+*/
+
+
