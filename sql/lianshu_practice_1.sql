@@ -370,14 +370,51 @@ SQL：
 
 
 SQL
-他有四個table (products, sales, stores, customers)，互相之間有foreignkey
-products: product_id, brand_name, class, price, 
-sales: product_id, store_id, transaction_date, customer_id, 
-stores: store_id, store_type, country, product_id, customer_id, store_sales, promotion_id, transaction_date
-customers: customer_id, gender, register_date, education 
+
                
 我有印象的題目如下：               
 1. find brands that have more than 3 products and the average price is higher than 2
 2. find the rate of sales with promotion code
 3. find the customers that buy products with brand XXX and OOO
 4. find out how many different product classes our California customers have purchased from?
+               
+他有四個table (products, sales, stores, customers)，互相之間有foreignkey
+products: product_id, brand_name, class, price, 
+sales: product_id, store_id, transaction_date, customer_id, 
+stores: store_id, store_type, country, product_id, customer_id, store_sales, promotion_id, transaction_date
+customers: customer_id, gender, register_date, education 
+               
+               
+'''
+https://4.bp.blogspot.com/-_HsHikmChBI/VmQGJjLKgyI/AAAAAAAAEPw/JaLnV0bsbEo/s1600/sql%2Bjoins%2Bguide%2Band%2Bsyntax.jpg
+'''
+
+               
+1. select 
+               brand_name as "brand", 
+               count(distinct product_id) "product_num", 
+               ave(price) as "ave_price",
+from products
+group by 1
+HAVING count(distinct product_id)>3 and ave(price)>2
+
+2.  rate = sales with promo / total sales    
+select 
+        Round(ifnull(sum(case when s2.promotion_id is NUll 0 else 1 end)/sum(*),0),2) as "promotion_rate"
+from 
+        sales s1
+        left join stores s2 on 
+               s1.product_id = s2.product_id 
+               and s1.store_id = s2.store_id 
+               and s1.customer_id = s2.customer_id 
+               and s1.transaction_date = s2.transaction_date
+
+3. select 
+               distinct(c.customers) 
+   from customers c
+   left join sales s1 on c.customer_id = s1.customer_id
+   left join products p on s1.product_id = p.product_id
+   where p.brand_name in ("B1", "B2")
+               
+4. 
+
