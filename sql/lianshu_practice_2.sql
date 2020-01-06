@@ -6,6 +6,16 @@ event include enter/post/cancel
 (1) what is the post success rate for each day in the last week?
 */
 
+post success rate =  # of post/ # of enter
+
+select 
+      date, 
+      Round(ifnull(SUM(CASE WHEN EVENT = "POST" 1 ELSE 0 END)/
+                   SUM(CASE WHEN EVENT = "ENTER" 1 ELSE 0), 0),2)
+FROM composer 
+where Datediff(date, curdate()) < 7
+group by 1
+
 
 
 
@@ -14,7 +24,18 @@ table- user 4 columns: userid | date | country | dau_flag{0,
 1dau_flag: daily active or not
 what is the average number of post per daily active user by country today?
 */
+               
+obj = total posts / active users
 
+select 
+     country, 
+     ROUND(ifnull(SUM(case when c.event="post" 1 ELSE 0 END)/
+                  count(distinct c.users),0),2) AS AVE_POST
+FROM 
+     COMPOSER c
+     JOIN USERS u ON c.userid = u.userid and c.date = u.date
+WHERE u.dau_flag = "active" and u.date = curdate()
+group by 1
 
 
 
@@ -22,7 +43,14 @@ what is the average number of post per daily active user by country today?
 Table: date timestamp send_id receive_id
 Question: What’s the fraction of users communicating to > 5 users in a day?
 */
+ 
 
+
+               
+
+               
+               
+               
 /*
 follow-up:  
 fraction of users who reponsed within a minute of a day 
