@@ -343,10 +343,11 @@ LIMIT 3
 
 
 第二轮sql也很简单，还是产品销售那四套表。 我都没做到需要join四个表的哈哈哈。
-总结一下四题：1，考了count，
+总结一下四题：
+1. 考了count，
 2. 忘了
-3.order by xxx limit  
-4.就是算一下利润百分比，萨姆(销售-成本）/萨姆 销售
+3. order by xxx limit  
+4. 就是算一下利润百分比，萨姆(销售-成本）/萨姆 销售
 
 
 
@@ -368,3 +369,15 @@ SQL：
 */
 
 
+SQL
+他有四個table (products, sales, stores, customers)，互相之間有foreignkey
+products: product_id, brand_name, class, price, 
+sales: product_id, store_id, transaction_date, customer_id, 
+stores: store_id, store_type, country, product_id, customer_id, store_sales, promotion_id, transaction_date
+customers: customer_id, gender, register_date, education 
+               
+我有印象的題目如下：               
+1. find brands that have more than 3 products and the average price is higher than 2
+2. find the rate of sales with promotion code
+3. find the customers that buy products with brand XXX and OOO
+4. find out how many different product classes our California customers have purchased from?
