@@ -37,16 +37,30 @@ b = [None, 2, None, 4, 5, None, 5, 4, None, 7, None, None, None, None]
 c = [None, None, None, 4, 5, None, 5, 4, None, 7, None, None, None, None]
 
 1. 给一个数字列表且里面有None，重新输出一遍把None位置的数用前面存在的数代替。a = [1, None, 2, None, None, 5, Ne]
-def fill_none(a):
-    for i, j in enumerate(a):
-        if j is None:
-            if i == 0:
-                a[0] = next(item for item in a if item is not None)
-            else:
-                a[i] = a[i-1]
-    return a
+def replaceNone(Alist):
+    for ix, item in enumerate(Alist):
+        if not item:
+                Alist[ix] = next(i for i in Alist if i) if ix==0 else Alist[ix-1]
+    return Alist
+
+
 
 2. 给一个数字列表且某些数字重复，给出每个数字还需要加进多少个才能使得列表里每个数字都一样多。
+nums = [1, 3, 4, 1, 7, 8, 3 , 2, 4, 5, 7, 2, 3, 5, 6, 4, 2, 8, 5]
+
+def replicateNumbers(nums):
+    max_dup = 0
+    num_dict = {}
+    for ix, num in enumerate(nums):
+        if num in num_dict:
+            num_dict[num] += 1
+        else:
+            num_dict[num] = 1
+        max_dup = max(max_dup, num_dict[num])
+        
+    for num in num_dict:
+        print("{} - {}".format(num, max_dup - num_dict[num]))
+
 nums = [1, 3, 4, 1, 7, 8, 3 , 2, 4, 5, 7, 2, 3, 5, 6, 4, 2, 8, 5]
 def duplicated_nums(alist):
     max_dup = 0
@@ -64,20 +78,23 @@ duplicated_nums(nums)
 
 
 3. Average word length of a list of words。注意对每个word做.strip()
-def ave_word_len(alist):
-    total = 0
-    for i in alist:
-        i = i.replace(" ", "")
-        total += len(i)
+
+def average_word_length(alist):
+    total = 0    
+    for word in alist:
+        word = word.strip()
+        total += len(word)
     return total/len(alist)
 
 4. 给两个包含数字的列表，求两个列表里不重复的数字，不用在意输出顺序。
-def diff_two_list(alist, blist):
-    a = list(set(alist))
-    b = list(set(blist))
-    union = list(set(a + b))
-    return [i for i in a if i not in union] + [i for i in b if i not in union]
-    #list((set(a).union(set(b))).difference(set(a).intersection(set(b))))
+
+def diff_list(alist, blist):
+    union = list(set(alist + blist))    
+    return [i for i in list(set(alist)) if i not in union] + [i for i in list(set(blist)) if i not in union]
+
+    list(set(a).union(set(b)).difference(set(a).intersection(set(b))))
+    
+    
 
 Coding
 a = (1, 0, 0, 2, 0, 0, 5)
@@ -94,7 +111,8 @@ def dot_product(a, b):
 
 
 
-1.一个input String， 一个input Character，问你character在string里面出现了几次，恶心的是java input 他两个都给的string， 自己要转换下，然后注意null的corner case
+# 1.一个input String， 一个input Character，问你character在string里面出现了几次，
+# 恶心的是java input 他两个都给的string， 自己要转换下，然后注意null的corner case
 def char_in_string(s, ch):
     count = 0
     for i in s:
